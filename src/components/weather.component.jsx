@@ -2,15 +2,15 @@ import React from "react";
 
 const Weather = (props) => {
   return (
-    <div className="container">
+    <div className="container text-light">
       <div className="cards pt-4">
-        <h1>
-          {props.city}, {props.country}
-        </h1>
+        <h1>{props.city}</h1>
         <h5 className="py-4">
           <i className={`wi ${props.weatherIcon} display-1`} />
         </h5>
-        <h1 className="py-2">{props.current_Temp}&deg;</h1>
+        {props.current_Temp ? (
+          <h1 className="py-2">{props.current_Temp}&deg;</h1>
+        ) : null}
 
         {/**show max & min temp */}
         {minmaxTemp(props.max_Temp, props.min_Temp)}
@@ -22,12 +22,14 @@ const Weather = (props) => {
 };
 
 function minmaxTemp(min, max) {
-  return (
-    <h3>
-      <span className="px-4">{min}&deg;</span>
-      <span className="px-4">{max}&deg;</span>
-    </h3>
-  );
+  if (min && max) {
+    return (
+      <h3>
+        <span className="px-4">{min}&deg;</span>
+        <span className="px-4">{max}&deg;</span>
+      </h3>
+    );
+  }
 }
 
 export default Weather;

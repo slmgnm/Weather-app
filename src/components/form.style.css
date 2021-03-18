@@ -3,7 +3,7 @@ form {
 }
 
 form input[name="city"],
-form input[name="Country"] {
+form input[name="country"] {
   background-color: transparent;
   color: white;
   border: 0;
@@ -12,6 +12,11 @@ form input[name="Country"] {
 }
 
 form input:focus {
-  background-color: transparent;
+  background-color: transparent !important;
   box-shadow: none !important;
+  color: white !important;
+}
+
+.container ::-webkit-input-placeholder {
+  color: rgb(195, 193, 193) !important;
 }

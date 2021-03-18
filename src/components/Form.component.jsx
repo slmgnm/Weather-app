@@ -19,12 +19,12 @@ const Form = (props) => {
             <input
               type="text"
               className="form-control"
-              name="Country"
+              name="country"
               autoComplete="off"
               placeholder="Country"
             />
           </div>
-          <div className="col-md-3">
+          <div className="col-md-3 mt-md-0 py-2 text-md-left">
             <button className="btn btn-warning">Get Weather</button>
           </div>
         </div>
