@@ -1,5 +1,9 @@
 form {
-  margin-top: 3rem;
+  margin-top: 6rem;
+}
+.container {
+  background-color: rgba(0, 0, 0, 0.335);
+  border-radius: 3px;
 }
 
 form input[name="city"],

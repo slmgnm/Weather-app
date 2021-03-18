@@ -7,7 +7,6 @@ import "weather-icons/css/weather-icons.min.css";
 import Weather from "./components/weather.component";
 import Form from "./components/Form.component";
 
-//api.openweathermap.org/data/2.5/weather?q=London,uk&appid={API key}
 const API_key = "1952cc01bff81ba8bf8650114746df46";
 
 class App extends React.Component {
@@ -27,7 +26,7 @@ class App extends React.Component {
     this.weatherIcon = {
       Thunderstorm: "wi-thunderstorm",
       Drizzle: "wi-sleet",
-      Rain: "wi-stor-showers",
+      Rain: "wi-storm-showers",
       Snow: "wi-snow",
       Atmosphere: "wi-fog",
       Clear: "wi-day-sunny",
@@ -35,10 +34,10 @@ class App extends React.Component {
     };
   }
 
-  calCelsius(temp) {
-    let cel = Math.floor(temp - 273.15);
-    return cel;
-  }
+  // calCelsius(temp) {
+  //   let cel = Math.floor(temp - 273.15);
+  //   return cel;
+  // }
   get_WeatherIcon(icons, rangeID) {
     switch (true) {
       case rangeID >= 200 && rangeID <= 232:
@@ -68,30 +67,41 @@ class App extends React.Component {
   getWeather = async (e) => {
     e.preventDefault();
 
-    const city = e.target.elements.city.value;
-    const country = e.target.elements.country.value;
-
-    if (city && country) {
+    try {
+      const city = e.target.elements.city.value;
+      const country = e.target.elements.country.value;
       const api_call = await fetch(
-        `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_key}`,
+        `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_key}&units=metric`,
       );
 
       const response = await api_call.json();
-
       console.log(response);
+      if (city && country) {
+        this.setState({
+          // `${response.name}, ${response.sys.country}`
+          city: response.city,
+          country: response.country,
 
+          current_Temp: Math.floor(response.main.temp),
+          max_Temp: Math.floor(response.main.temp_max),
+          min_Temp: Math.floor(response.main.temp_min),
+          description: response.weather[0].description,
+          error: false,
+        });
+        this.get_WeatherIcon(this.weatherIcon, response.weather[0].id);
+      }
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+      }
       this.setState({
-        city: `${response.name}, ${response.sys.country}`,
-
-        current_Temp: this.calCelsius(response.main.temp),
-        max_Temp: this.calCelsius(response.main.temp_max),
-        min_Temp: this.calCelsius(response.main.temp_min),
-        description: response.weather[0].description,
-        error: false,
+        // city: undefined,
+        // country: undefined,
+        // current_Temp: undefined,
+        // max_Temp: undefined,
+        // min_Temp: undefined,
+        // description: undefined,
+        error: true,
       });
-      this.get_WeatherIcon(this.weatherIcon, response.weather[0].id);
-    } else {
-      this.setState({ error: true });
     }
   };
 

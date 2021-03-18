@@ -23,6 +23,14 @@ const Form = (props) => {
               autoComplete="off"
               placeholder="Country"
             />
+            {/*<input id="color" list="suggestions">
+             <datalist id="suggestions">
+    <option value="Black">
+    <option value="Red">
+    <option value="Green">
+    <option value="Blue">
+    <option value="White">
+</datalist> */}
           </div>
           <div className="col-md-3 mt-md-0 py-2 text-md-left">
             <button className="btn btn-warning">Get Weather</button>
