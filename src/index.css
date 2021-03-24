@@ -5,12 +5,22 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: url(./assets/Background.jpg);
+  
+  background-image: url("./assets/Background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
-
   background-attachment: fixed;
   background-color: #464646;
+}
+
+
+.body.warm {
+  background-image: url("./assets/warm.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: #464646;
+  
 }
 
 code {

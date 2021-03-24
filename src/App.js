@@ -21,6 +21,7 @@ class App extends React.Component {
       description: "",
       icon: undefined,
       error: false,
+      // date: undefined,
     };
 
     this.weatherIcon = {
@@ -76,12 +77,10 @@ class App extends React.Component {
 
       const response = await api_call.json();
       console.log(response);
+
       if (city && country) {
         this.setState({
-          // `${response.name}, ${response.sys.country}`
-          city: response.city,
-          country: response.country,
-
+          city: `${response.name}, ${response.sys.country}`,
           current_Temp: Math.floor(response.main.temp),
           max_Temp: Math.floor(response.main.temp_max),
           min_Temp: Math.floor(response.main.temp_min),
@@ -94,12 +93,6 @@ class App extends React.Component {
       if (ex.response && ex.response.status === 400) {
       }
       this.setState({
-        // city: undefined,
-        // country: undefined,
-        // current_Temp: undefined,
-        // max_Temp: undefined,
-        // min_Temp: undefined,
-        // description: undefined,
         error: true,
       });
     }
@@ -107,7 +100,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
+      <div
+        className={
+          typeof this.state.current_Temp != "undefined"
+            ? this.state.current_Temp > 7
+              ? "App warm"
+              : "App"
+            : "body"
+        }>
         <Form loadWeather={this.getWeather} error={this.state.error} />
         <Weather
           city={this.state.city}
