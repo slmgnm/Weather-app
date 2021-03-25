@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "weather-icons/css/weather-icons.min.css";
 import Weather from "./components/weather.component";
 import Form from "./components/Form.component";
+import Forecast from "./components/forecast.component";
 
 const API_key = "1952cc01bff81ba8bf8650114746df46";
 
@@ -21,7 +22,7 @@ class App extends React.Component {
       description: "",
       icon: undefined,
       error: false,
-      // date: undefined,
+      hourlyForecast: [],
     };
 
     this.weatherIcon = {
@@ -74,24 +75,31 @@ class App extends React.Component {
       const api_call = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_key}&units=metric`,
       );
-
       const response = await api_call.json();
-      console.log(response);
 
-      if (city && country) {
-        this.setState({
-          city: `${response.name}, ${response.sys.country}`,
-          current_Temp: Math.floor(response.main.temp),
-          max_Temp: Math.floor(response.main.temp_max),
-          min_Temp: Math.floor(response.main.temp_min),
-          description: response.weather[0].description,
-          error: false,
-        });
-        this.get_WeatherIcon(this.weatherIcon, response.weather[0].id);
-      }
+      const lat = response.coord.lat;
+      const lon = response.coord.lon;
+      const api_call_forecast = await fetch(
+        `https://api.openweathermap.org/data/2.5//onecall?lat=${lat}&lon=${lon}&APPID=${API_key}&units=metric`,
+      );
+      const resForecast = await api_call_forecast.json();
+      console.log(resForecast);
+
+      this.setState({
+        city: `${response.name}, ${response.sys.country}`,
+
+        current_Temp: Math.floor(response.main.temp),
+        max_Temp: Math.floor(response.main.temp_max),
+        min_Temp: Math.floor(response.main.temp_min),
+        description: response.weather[0].description,
+        error: false,
+        hourlyForecast: resForecast.hourly,
+      });
+      this.get_WeatherIcon(this.weatherIcon, response.weather[0].id);
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
       }
+
       this.setState({
         error: true,
       });
@@ -99,6 +107,7 @@ class App extends React.Component {
   };
 
   render() {
+    const hourlyForecast = this.state.hourlyForecast;
     return (
       <div
         className={
@@ -118,6 +127,7 @@ class App extends React.Component {
           description={this.state.description}
           weatherIcon={this.state.icon}
         />
+        {hourlyForecast.length > 0 && <Forecast forecast={hourlyForecast} />}
       </div>
     );
   }
